@@ -7,9 +7,7 @@
     </head>
     <body>
         <div class="chat">
-            <div id="sidebar" class="chat__sidebar">
-
-            </div>
+            <div id="sidebar" class="chat__sidebar"></div>
 
             <div class="chat__main">
                 <div id="messages" class="chat__messages"></div>
@@ -27,11 +25,11 @@
         
         <script id="message-template" type="text/html">
             <div class="message">
+                <!-- mustache syntax to inject passed in value -->
                 <p>
                     <span class="message__name">{{username}}</span>
                     <span class="message__meta">{{createdAt}}</span>
-                </p>
-                <!-- mustache syntax to inject passed in value -->
+                </>
                 <p>{{message}}</p>    
             </div>
         </script>

@@ -20,8 +20,6 @@ const publicDirectoryPath = path.join(__dirname, ('../public'))
 // setup static directory to serve
 app.use(express.static(publicDirectoryPath))
 
-let count = 0
-
 io.on('connection', (socket) => {
     console.log('New WebSocket connection!')
 
@@ -37,12 +35,16 @@ io.on('connection', (socket) => {
         // we use user object because of its data is sanitised i.e user.room not room
         socket.join(user.room) 
 
+        // emit and broadcast welcome messages to relevant users/rooms
         socket.emit('message', generateMessage('Admin', 'Welcome!'))
         socket.broadcast.to(user.room).emit('message', generateMessage('Admin', `${user.username} has joined!`))
+        
+        // update the users in the room to update the sidebar
         io.to(user.room).emit('roomData', {
             room: user.room,
             users: getUsersInRoom(user.room)
         })
+
         // run callback with no error if user joins successfully
         callback()
     })
@@ -56,14 +58,16 @@ io.on('connection', (socket) => {
             return callback('Watch yo profanity!')
         }
 
-
+        // send message and users username
         io.to(user.room).emit('message', generateMessage(user.username, message))
+        
         // runs the event acknowledgement
         callback()
     })
 
     // send current user location using google maps link
     socket.on('sendLocation', (coords, callback) => {
+        // get the user and send out location message
         const user = getUser(socket.id)
         io.to(user.room).emit('locationMessage', generateLocationMessage(user.username, `https://google.com/maps?q=${coords.latitude},${coords.longitude}`))
         callback()
@@ -73,6 +77,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         const user = removeUser(socket.id)
 
+        // if user exists, disconnect user, emit messages to relevant rooms and update room users list to update sidebar
         if (user) {
             io.to(user.room).emit('message', generateMessage('Admin', `${user.username} has left!`))
             io.to(user.room).emit('roomData', {
@@ -83,6 +88,7 @@ io.on('connection', (socket) => {
     })
 })
 
+// listen to server on given port
 server.listen(port, () => {
     console.log(`Server running on port ${port}`)
 })

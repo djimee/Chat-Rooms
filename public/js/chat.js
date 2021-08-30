@@ -126,6 +126,7 @@ $sendLocationBtn.addEventListener('click', () => {
     })
 })
 
+// emit an event for user to join a room
 socket.emit('join', { username, room }, (error) => {
     // handle any errors in the client-side, if there 
     // are any errors, redirect to root page

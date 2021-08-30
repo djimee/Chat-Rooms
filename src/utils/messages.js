@@ -1,3 +1,4 @@
+// generate a message given username and text, and generate a date using moment js
 const generateMessage = (username, text) => {
     return {
         username,
@@ -6,6 +7,7 @@ const generateMessage = (username, text) => {
     }
 }
 
+// generate a location message given username and text, and generate a date using moment js
 const generateLocationMessage = (username, url) => {
     return {
         username,

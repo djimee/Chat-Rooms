@@ -6,7 +6,7 @@ const addUser = ({ id, username, room }) => {
     username = username.trim().toLowerCase()
     room = room.trim().toLowerCase()
 
-    // validate data
+    // validate data by checking if the user and room is given
     if (!username || !room) {
         return {
             error: 'Username and room are both required!'
@@ -24,7 +24,7 @@ const addUser = ({ id, username, room }) => {
         }
     }
 
-    // store user
+    // store user in users array
     const user = { id, username, room }
     users.push(user)
     return { user }
@@ -42,10 +42,12 @@ const removeUser = (id) => {
     }
 }
 
+// get a user by their id 
 const getUser = (id) => {
     return users.find(user => user.id === id)
 }
 
+// get an array of the users currently in a room
 const getUsersInRoom = (room) => {
     room = room.trim().toLowerCase()
     return users.filter(user => user.room === room)
